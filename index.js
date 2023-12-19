@@ -18,13 +18,13 @@ const updates = publish(`${name}_updates`, {
         ctx.incremental(), `with ids_to_update as \
       (select ${uniqueKey}, ${hash}  from ${ctx.ref(source)}\
       except distinct \
-      (select ${uniqueKey}, ${hash} from ${ctx.self()} source)\
+      (select ${uniqueKey}, ${hash} from ${ctx.self()} source\
       INNER JOIN ( \
           select ${uniqueKey},max(${timestamp}) load_dttm from ${ctx.self()}\
           GROUP BY ${uniqueKey} \
         ) target \
       ON source.${uniqueKey} = target.${uniqueKey} AND source.${timestamp} = target.${timestamp}\				
-      )`
+      ))`
     )}
     select * from ${ctx.ref(source)}
     ${ctx.when(
